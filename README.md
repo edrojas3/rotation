@@ -1,2 +1,2 @@
 # rotation
-mfiles for analysing rotaiton project data
+mfiles to analyze spike activity of the rotation task
