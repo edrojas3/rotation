@@ -4,9 +4,9 @@ function e = getSessionStruct(id)
 % e = struct with session info separated by trial
 
 % File path
-nevFile = ['datafiles\',id,'.nev'];
-ns1File = ['datafiles\', id, '.ns1'];
-ns2File = (['datafiles\', id,'.ns2']);
+nevFile = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\nev\',id,'.nev'];
+ns1File = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\ns1\', id, '.ns1'];
+ns2File = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\ns2\', id,'.ns2'];
 
 % Session structure
 if exist(nevFile,'file') && exist(ns1File,'file');
@@ -20,7 +20,7 @@ if exist(nevFile,'file') && exist(ns1File,'file');
             fs = ns2.MetaTags.SamplingFreq;
             timeSecs = (1:size(lfp,2))/fs; 
             for n = 1:length(e.trial);
-                trialStart = e.trial(n).waitCueIni - 1;
+                trialStart = e.trial(n).waitCueStart - 1;
                 trialEnd = e.trial(n).targOff + 1;
                 timeIndex = timeSecs >= trialStart & timeSecs <= trialEnd;
                 lfpSection = lfp(:,timeIndex == 1);
