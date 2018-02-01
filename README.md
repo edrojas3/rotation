@@ -40,3 +40,11 @@ For a single session run the following line:
 ```
 psychophys(e,'rotationAngle')
 ```
+To pool the data run:
+
+```
+psychophysics(dir)
+```
+This will plot a psychophysics curve pooling the information of all the .mat files inside _dir_. The mat files must contain _e_ structures.
+
+## Raster Plots and Firing Rates
