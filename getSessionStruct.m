@@ -1,18 +1,21 @@
 function e = getSessionStruct(id)
+% Transforms black rock files (nev, ns1, and ns2) of each recording session
+% into a MATLAB struct array with all the information separated by trial.
+%
 % USAGE: e = getSessionStruct(id)
 % id = file identifier ej. d1605131058
 % e = struct with session info separated by trial
 
 % File path
-nevFile = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\nev\',id,'.nev'];
-ns1File = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\ns1\', id, '.ns1'];
-ns2File = ['C:\Users\eduardo\Documents\matlab\rotation\datafiles\ns2\', id,'.ns2'];
+nevFile = ['C:\Users\eduardo\Documents\matlab\datafiles\nev\',id,'.nev'];
+ns1File = ['C:\Users\eduardo\Documents\matlab\datafiles\ns1\', id, '.ns1'];
+ns2File = ['C:\Users\eduardo\Documents\matlab\datafiles\ns2\', id,'.ns2'];
 
 % Session structure
 if exist(nevFile,'file') && exist(ns1File,'file');
     e = blackRock2event(nevFile,ns1File); % event time-stamps and spikes
     if isstruct(e)
-        e = addRobMarkers(e); % Add markers of the stimulus movement
+        e = addRobMovement(e); % Add markers of the stimulus movement
         % Add LFP signal to the structure
         if exist(ns2File,'file')
             ns2 = openNSx(ns2File);
