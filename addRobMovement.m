@@ -1,27 +1,15 @@
 function e = addRobMovement(e)
-% Creates a template for the signal of each stimulus, identifies start and
-% end points, sections it, and makes a trial by trial comparison of the
-% template with the signal to identify when the stimulus starts and ends.
-% Adds the information as robMovStart and robMovEnd in e.trial field.
-%
-%USAGE: e = addRobMovement(e)
-%
-% Calls functions:
-% getRobMarkers
-% submean
-% scale01
 
 A = [0.1,0.2,0.4,0.8,1.6,3.2];
 angs = [-A,A];
 
 D = [0.064,0.084,0.102,0.154,0.292,0.546];
-durations = [D,D];
 angles = round([e.trial.rotationAngle]*10)/10;
 for a = 1:length(angs)
     % Signal per stimulus magnitude
     signals = reshape([e.trial(angles== angs(a)).robSignal],1000, sum(angles == angs(a))) ;
     signals = submean(scale01(signals)); 
-    trial_index = find(angles == angs(a));
+    trial_index = find(anles == angs(a));
 
     % Align signals to first trial
     signals_aligned = zeros(size(signals));

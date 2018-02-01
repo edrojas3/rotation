@@ -1,0 +1,12 @@
+function [n, ang] = getNumTrials(e)
+
+%%
+trials_arot = [e.trial.anguloRotacion]';
+arot = unique(trials_arot);
+
+n = zeros(size(arot));
+
+for a = 1:length(arot);
+   n(a)  = sum(trials_arot == arot(a));
+end
+

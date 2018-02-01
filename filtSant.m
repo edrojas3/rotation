@@ -12,7 +12,8 @@ Tiempo=L/fs;
 t=0:T:Tiempo-T;
 x0=signal;
 x1=mean(signal(1:100));
-x2=x0-x1;
+x2=x0-x1; % se le resta el ruido.
+
 Vector_size=L;
 
 signal=x2;

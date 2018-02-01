@@ -10,9 +10,9 @@ for n = 1:length(e.trial);
     ts = e.trial(n).robTimeSec;
 
     cmdini = e.trial(n).cmdStim;
-    cmdfin = e.trial(n).stimEnd;
-    movini = e.trial(n).movStart;
-    movfin = e.trial(n).movEnd;
+    cmdfin = e.trial(n).stimFin;
+    movini = e.trial(n).movIni;
+    movfin = e.trial(n).movFin;
 
     tsini = cmdini < ts & ts < movini;
     ini = find(tsini == 1);
@@ -33,12 +33,12 @@ for n = 1:length(e.trial);
     try 
         mark = getRobMarkers(signal, 'startlim', startlim, 'endlim', endlim);
     catch err
-        e.trial(n).robMarkStart= movini;
-        e.trial(n).robMarkEnd= movfin;
+        e.trial(n).robMarkIni = movini;
+        e.trial(n).robMarkfin = movfin;
         continue
     end
 
     mark = [ts(mark(1)), ts(mark(2))];
-    e.trial(n).robMarkStart = mark(1);
-    e.trial(n).robMarkEnd= mark(2);
+    e.trial(n).robMarkIni = mark(1);
+    e.trial(n).robMarkfin = mark(2);
 end

@@ -1,0 +1,70 @@
+function [] = raster2_test(e, spike_id, alignEvent,sorted_trials)
+lcolor = [0.4,0.4,0.4];
+
+switch alignEvent
+    case 'noAlign'
+        aligned = selectTrials(e,'alignEvent
+        rasterplot({e.spikes.(spike_id)});
+    case 'manosFijasFin';
+        aligned = selectTrials(e,'alignEvent',alignEvent);
+        xlim = [-0.25,0.25];
+        samples = xlim(1):.01:xlim(2);
+        subplot(121)
+        rasterplot({aligned.spikes(sorted_trials).(spike_id)},...
+                'xlim',xlim,...
+                'color','k');
+        set(gca,'xlim',xlim, 'ylim', [1,length(sorted_trials)])
+        line ([0,0], [1,length(sorted_trials)], 'color', lcolor, 'linewidth', 3)
+        title (alignEvent)
+
+        subplot(122)
+        getfrs(e,spike_id,'alcance', 'samples', samples);
+        set(gca,'xlim',xlim)
+    %%
+    case 'touchIni';
+        aligned = selectTrials(e,'alignEvent',alignEvent);
+        xlim = [-0.2,0.1];
+        samples = xlim(1):.01:xlim(2);
+        subplot(121)
+        rasterplot({aligned.spikes(sorted_trials).(spike_id)},...
+                'xlim',xlim,...
+                'color','k');
+        set(gca,'xlim',xlim, 'ylim', [1,length(sorted_trials)], 'yticklabel',[], 'ytick', [])
+        line ([0,0], [1,length(sorted_trials)], 'color', lcolor, 'linewidth', 3)
+        title (alignEvent)
+
+        subplot(122)
+        getfrs(e,spike_id,'anguloInicio', 'samples', samples);
+        set(gca,'xlim',xlim)
+
+    %%
+    case 'movIni';
+        aligned = selectTrials(e,'alignEvent',alignEvent);
+        xlim = [-0.1,1.2];
+        samples = xlim(1):.01:xlim(2);
+        subplot(121)
+        rasterplot({aligned.spikes(sorted_trials).(spike_id)},...
+                'xlim',xlim,...
+                'color','k');
+        set(gca,'xlim',xlim, 'ylim', [1,length(sorted_trials)], 'yticklabel',[], 'ytick', [])
+        [xm, ym] = getmarkers(aligned.events,sorted_trials,'movFin');
+        line(xm, ym,'linestyle','none','linewidth',3,'color','r','marker','.','markersize',6);
+
+        line ([0,0], [1,length(sorted_trials)], 'color', lcolor, 'linewidth', 3)
+        title (alignEvent)
+
+        subplot(122)
+        getfrs(e,spike_id,'anguloRotacion', 'samples', samples);
+        set(gca,'xlim',xlim)
+    %%
+    case 'targOn';
+        aligned = selectTrials(e,'alignEvent',alignEvent);
+        xlim = [-0.5,0.5];
+        subplot(121)
+        rasterplot({aligned.spikes(sorted_trials).(spike_id)},...
+                'xlim',xlim,...
+                'color','k');
+        set(gca,'xlim',xlim, 'ylim', [1,length(sorted_trials)], 'yticklabel',[], 'ytick', [])
+        line ([0,0], [1,length(sorted_trials)], 'color', lcolor, 'linewidth', 3)
+        title (alignEvent)
+end

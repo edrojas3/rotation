@@ -1,0 +1,29 @@
+function c = colormat(angulos, n)
+
+%%
+ang_der = angulos(angulos < 0);
+n_der = n(angulos < 0);
+n_der = flipdim(n_der,1);
+cumder = [0;cumsum(n_der)];
+yellow = linspace(0,1,length(n_der));
+
+
+
+
+ cder= zeros(sum(n_der),3);
+
+for k = 1: length(n_der);
+    l = length(cumder(k)+1:cumder(k+1));
+    cder(cumder(k)+1:cumder(k+1),:) = [ones(l,1),yellow(k)*ones(l,1),zeros(l,1)];
+end
+%%
+ang_izq = angulos(angulos > 0);
+n_izq = n(angulos > 0);
+cumizq = [0,cumsum(n_izq)];
+blue = linspace(0,1,length(n_izq));
+
+cizq = zeros(sum(n_izq),3);
+
+for k = 1:length(n_izq);
+   l = length(cumizq(k)+1:cumder()) 
+end
