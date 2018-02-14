@@ -30,7 +30,7 @@ To get a structure array similar to the ones in _datafiles/mat_ run:
 e = getSessionStruct(id)
 ```
 
-Where 'e' is a structure with all the information and 'id' is the identifier (file name without the extension).
+Where 'e' is a structure with all the information and 'id' is the file identifier with the full path (ex. C:\Data\d1608091032). Notice that there is no file extension.
 
 ## Pyschophysics
 In each trial, the stimulus rotation was randomly selected from a set of 12 possible magnitudes: -3.2,-1.6,-0.8,-0.4,-0.2-0.1,0.1,0.2,0.4,0.8,1.6,3.2 (degrees of rotation, positive numbers represent left rotations). The way we evaluated behavioral data is by plotting how many 'left' choices the monkeys emitted as a function of stimulus magnitude. 
