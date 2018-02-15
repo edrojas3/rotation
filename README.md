@@ -38,12 +38,12 @@ In each trial, the stimulus rotation was randomly selected from a set of 12 poss
 For a single session run the following line:
 
 ```
-psychophys(e,'rotationAngle')
+psicofis(e,'anguloRotacion')
 ```
 To pool the data run:
 
 ```
-psychophysics(dir)
+psicofisica(dir)
 ```
 This will plot a psychophysics curve pooling the information of all the .mat files inside _dir_. The mat files must contain _e_ structures.
 
