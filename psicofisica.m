@@ -1,16 +1,12 @@
-% Psicofísica
-clc
-clear all
-% Obtener la respuesta del mono
-matdir = ['C:\Users\eduardo\Documents\proyectos\rotacion\matfiles\recordings'];
-files = dir([matdir,'\*.mat']);
+function [] = psicofisica(matdir)
+files = dir([matdir,filesep,'*.mat']);
 A = [0.1,0.2,0.4,0.8,1.6,3.2];
 A = sort([-A,A]);
 
 R = cell(2,length(A));
 
 for f = 1:length(files)
-    load([matdir,'\',files(f).name])
+    load([matdir,filesep,files(f).name])
     mono = files(f).name(1);
     session_angs = [e.trial.anguloRotacion];
     session_angs = round(session_angs*10) / 10;
@@ -40,13 +36,14 @@ end
 
 %%
 clf
-logaxis=[-log(abs(A(1:6))),log(A(7:end))];
+logaxis=[-log(abs(A(1:6)))+5,log(A(7:end))+10];
 colord = [4/255,118/255,217/255];
 colorc = [243/255,74/255,83/255];
 
 plot(logaxis,p_izq(2,:),'-o','color',colorc,'markerfacecolor',colorc,'linewidth',2); hold on
 plot(logaxis,p_izq(1,:),'-o','color',colord,'markerfacecolor',colord,'linewidth',2);  hold on
 legend('Monkey C', 'Monkey D','location', 'southeast')
-set(gca,'box','off','xscale','log','yscale','log')
+% set(gca,'box','off','xscale','log','yscale','log')
+set(gca,'box','off','xtick',logaxis,'xticklabel',A)
 xlabel('Stimulus Amplitude (degrees of rotation)')
 ylabel('Probability of Answering Left')

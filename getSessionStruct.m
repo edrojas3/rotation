@@ -1,19 +1,22 @@
-function e = getSessionStruct(id)
-% USO: e = getSessionStruct(id)
-% id = el identificador del archivo a cargar ej. d1605131058
-% e = estructura con la información de la sesión
+function e = getSessionStruct(file)
+% USO: e = getSessionStruct(file)
+% file = file with the complete path; ex. /home/documents/files/d1605131058
+% e = struct array with time events, spikes, and lfp separated by trials.
 
 %%
- nevData = ['C:\Users\eduardo\Google Drive\Exp mono\',id,'.nev'];
- ns1File = ['C:\Users\eduardo\Google Drive\Exp mono\', id, '.ns1'];
+if exist([file,'.nev'],'file')
+    [pathstr,name] = fileparts([file,'.nev']);
+    nevData = [pathstr,filesep,name,'.nev'];
+    ns1File = [pathstr,filesep,name,'.ns1'];
+else
+    error([file, 'not found.'])
+end
  
 e = blackRock2event(nevData,ns1File);
 if isstruct(e)
     e = addRobMarkers(e);
 
-
-    nevdir = 'C:\Users\eduardo\Google Drive\Exp mono';
-    ns2File = ([nevdir, '\', id,'.ns2']);
+    ns2File = [pathstr,filesep,name,'.ns2'];
     ns2 = openNSx(ns2File);
     lfp = ns2.Data;
 
@@ -21,7 +24,7 @@ if isstruct(e)
     fs = ns2.MetaTags.SamplingFreq;
     timeSecs = (1:size(lfp,2))/fs;
 
-    % Cortar la señal del LFP usando el inicio y el final de cada ensayo
+    % Cortar la seï¿½al del LFP usando el inicio y el final de cada ensayo
     for n = 1:length(e.trial);
         trialStart = e.trial(n).waitCueIni - 1;
         trialEnd = e.trial(n).targOff + 1;
