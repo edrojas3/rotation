@@ -47,4 +47,30 @@ psicofisica(dir)
 ```
 This will plot a psychophysics curve pooling the information of all the .mat files inside _dir_. The mat files must contain _e_ structures.
 
+**The log axis is still missing**
+
 ## Raster Plots and Firing Rates
+To visualize a neuron's activity we found convenient to plot its raster and firing rate in one figure. To do this you can use:
+
+```
+rasterAndFiringRates(e,unit)
+```
+
+Where _e_ is the structure with the session info, and unit is the string of the neuron's code name as described before (ex. spike13).
+
+Once you run the function from above, you will get a figure divided in two. The upper part is the raster plot of the neuron aligned to three events of the task:
+	1. Wait
+	2. Touch object
+	3. Stimulus onset
+In the raster plot time is in the _x_ axis and in the _y_ axis are the trials ordered by stimulus magnitude. The trials where the stimulus rotated to the right are in the bottom half of the raster plot. The black marks are the times where an action potential occurred time locked to the 3 aligning events (green straight lines). The other colored markers are the events that happend near the aligning events.
+
+The firing rate is plotted at the bottom of the figure separated by left (blue traces) and right (red traces) rotations. To obtained the firing rate we used an exponential window with a decay constant (tau) of 0.05 ms and step movements 0f 0.1 ms.
+
+Only correct trials were used for both plots.
+
+## Normalization of firing rate
+For normalizing (z-score) the firing rates run:
+
+```
+[frnorm, timesec] = fratenorm(e,spk);
+```

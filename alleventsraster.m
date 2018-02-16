@@ -1,28 +1,28 @@
-function  maxtime = alleventsraster(e, spike_id,sortedBy, alignEvents, endEvents,labels,rasterlimits,printraster)
+function  maxtime = alleventsraster(e, spike_id,varargin)
 % USO: 
 %      maxtime = alleventsraster(e, spike_id,sortedBy, alignEvents, endEvents,labels, printraster)
 % 
-% alleventsraster es una función que crea un raster plot para múltiples
-% eventos de la tarea dentro de un mismo plot. Cada raster está alineado a
+% alleventsraster es una funciï¿½n que crea un raster plot para mï¿½ltiples
+% eventos de la tarea dentro de un mismo plot. Cada raster estï¿½ alineado a
 % diferentes eventos y cada evento puede tener diferentes marcadores que
 % indican el tiempo en el que ocurrieron diferentes eventos posteriores a
-% la alineación. 
+% la alineaciï¿½n. 
 %
 % Argumentos de entrada:
 % e: estructura en el que vienen los tiempos de los eventos de la tarea.
 % spike_id: nombre de la unidad en el formato spike11;
 % sortedBy: modo en los que quieres que se ordenen los ensayos: por
-%           anguloInicio o anguloRotación.
-% alignEvents: celda con la lista de eventos de alineación (ex. alignEvents={'touchIni', 'robMovIni'};)
+%           anguloInicio o anguloRotaciï¿½n.
+% alignEvents: celda con la lista de eventos de alineaciï¿½n (ex. alignEvents={'touchIni', 'robMovIni'};)
 % endEvents: lista con los marcadores de eventos posteriores al de
-%           alineación. Puede haber múltiples endEvents por alineación, por lo tanto
+%           alineaciï¿½n. Puede haber mï¿½ltiples endEvents por alineaciï¿½n, por lo tanto
 %           la variable tiene que ser una lista de celdas y en cada celda la lista de
 %           endEvents. Ejemplo: endEvents={{robMovIni, robMovFin}, {robMovFin,...
 %           touchFin, targOn}}; en este caso cada celda tiene una lista de endEvents
-%           para cada alineación de alignEvents.
-% labels: titulos que quieres que cada alineación tenga en el raster para
-%           poder identificarlos (debería de ser argumento opcional, pero por ahora
-%           no lo es). Es una celda con la lista de las etiquetas de cada alineación,
+%           para cada alineaciï¿½n de alignEvents.
+% labels: titulos que quieres que cada alineaciï¿½n tenga en el raster para
+%           poder identificarlos (deberï¿½a de ser argumento opcional, pero por ahora
+%           no lo es). Es una celda con la lista de las etiquetas de cada alineaciï¿½n,
 %           por lo tanto su longitud tiene que ser igual a la de alignEvents.
 % printraster: 1 si quieres que lo imprima, 0 si no.
 %
@@ -36,6 +36,17 @@ function  maxtime = alleventsraster(e, spike_id,sortedBy, alignEvents, endEvents
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+% sortedBy, alignEvents, endEvents,labels,rasterlimits,printraster
+sortedBy = getArgumentValue('sortedBy','anguloRotacion',varargin{:});
+alignEvents = getArgumentValue('alignEvents',{'manosFijasIni','touchIni', 'robMovIni'},varargin{:});
+endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...
+            {'touchCueIni','manosFijasFin','robMovIni'},...
+            {'robMovFin', 'touchCueFin', 'targOn', 'targOff'}},varargin{:});
+labels = getArgumentValue('labels',{'Wait', 'Contact', 'Stim On'},varargin{:});
+rasterlimits = getArgumentValue('rasterlimits',[-0.5, 2;-2,0.8;-0.3,0.3],varargin{:});
+printraster = getArgumentValue('printraster',1);
+
+%%
 id = e.ArchivoNEV(1:end-4);
 ntrials = length(e.trial);
 
@@ -44,8 +55,8 @@ ntrials = length(e.trial);
 %                 -0.3,0.3];
 rasterlimits = [rasterlimits;0,0];
 % printraster = 1; sortedBy = 'anguloRotacion';
-% Ordenar ensayos dependiendo de la magnitud y dirección de rotación del
-% estímulo. 
+% Ordenar ensayos dependiendo de la magnitud y direcciï¿½n de rotaciï¿½n del
+% estï¿½mulo. 
 angevents = selectTrials(e,'alignEvent','robMovIni','delnotfound', 1);
 contact = [angevents.events.touchIni];
 angulos = [angevents.events.(sortedBy)];
@@ -79,7 +90,7 @@ err_indx = sort(find(ismember(sorted_trials, errores) == 1));
 %     error('Las filas de rasterlimits tiene que ser igual a la longitud de alignEvents')
 % end
 
-% Inicialización de variables
+% Inicializaciï¿½n de variables
 xticks = cell(length(alignEvents),1);
 yticks = xticks;
 start_xmarkers = xticks;
@@ -188,7 +199,7 @@ if printraster
 %         plot(Xticks(1,:), Yticks(1,:), '.k', 'markersize', markersize)
         ylim = [1,ntrials+1];
         
-        % Cambiar ensayos en los que se equivocó por ticks rojos
+        % Cambiar ensayos en los que se equivocï¿½ por ticks rojos
         y_err_indx = find(ismember(Yticks(1,:), err_indx - 0.4) == 1);
 %         line( repmat([-0.3;0.8],1,length(err_indx)), [err_indx'; err_indx'], 'color', [1,0.9,0.9]);
 %         line(Xticks(:,y_err_indx), Yticks(:,y_err_indx),'color', 'r', 'linewidth',1)
@@ -207,5 +218,6 @@ if printraster
     T_position = get(T, 'position');
     T_offset = T_position(2) + (T_position(2) * 0.01);
     set(T, 'position', [T_position(1), T_offset, T_position(3)]);
+    shg
 end
 
