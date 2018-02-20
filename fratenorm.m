@@ -58,12 +58,24 @@ rotations = round([aligned.events.anguloRotacion]*10)/10;
 if bothways == 1;
     leftindex = ismember(rotations,abs(A));
     rightindex = ismember(rotations,-abs(A));
-    leftFR = nanmean(normfrate(leftindex,:));
-    rightFR = nanmean(normfrate(rightindex,:));
+    if sum(leftindex) > 1;
+        leftFR = nanmean(normfrate(leftindex,:));
+    else
+        leftFr = normfrate(leftindex,:);
+    end
+    if sum(rightindex)>1;
+        rightFR = nanmean(normfrate(rightindex,:));
+    else
+        rightFr = normfrate(rightindex,:);
+    end
     normfrate = [leftFR;rightFR];
 else
     index = ismember(rotations,A);
-    normfrate = nanmean(normfrate(index,:));
+    if sum(index) > 1;
+        normfrate = nanmean(normfrate(index,:));
+    else
+        normfrate = normfrate(index,:);
+    end
 end
 
 % Plot firing rates

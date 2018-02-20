@@ -62,7 +62,7 @@ Once you run the function from above, you will get a figure divided in two. The 
 	1. Wait
 	2. Touch object
 	3. Stimulus onset
-In the raster plot time is in the _x_ axis and in the _y_ axis are the trials ordered by stimulus magnitude. The trials where the stimulus rotated to the right are in the bottom half of the raster plot. The black marks are the times where an action potential occurred time locked to the 3 aligning events (green straight lines). The other colored markers are the events that happend near the aligning events.
+In the raster plot time is in the _x_ axis and in the _y_ axis are the trials ordered by stimulus magnitude. The trials where the stimulus rotated to the right are in the bottom half of the raster plot. The black marks are the times where an action potential occurred time locked to the 3 aligning events (green straight lines). The other colored markers are the events that happened near the aligning events.
 
 The firing rate is plotted at the bottom of the figure separated by left (blue traces) and right (red traces) rotations. To obtained the firing rate we used an exponential window with a decay constant (tau) of 0.05 ms and step movements 0f 0.1 ms.
 
@@ -74,3 +74,43 @@ For normalizing (z-score) the firing rates run:
 ```
 [frnorm, timesec] = fratenorm(e,spk);
 ```
+
+The previous function gets the firing rate aligned to the stimulus onset as a default. To change this you can specify the align event you want. For example, to get the firing rate aligned to the moment when the monkey touched the object you can run:
+
+```
+[frnorm, timesec] = fratenorm(e,spk,'alignEvent','touchIni');
+
+```
+
+## Detrending of firing rate
+For detrending (demeaning) the firing rates run:
+
+```
+[frdet, timesec] = fratedetrend(e,spk)
+```
+This function also aligns the spike times to the stimulus onset and you can change that the same way as the _fratenorm_ function described above.
+
+## Neuron Classification
+For classifying neurons you have to plot rasters and firing rates to visually inspect in which event the neuron modulates its activity. Though there may be more sophisticated techniques (ex. machine learning) for classification, we used the rustic primitive way. Hope to get into the 21st century soon.
+
+## Population activity
+Once you have your neurons classified (ex. left preference, right preference, or motor neurons), make a cell array with a list of identifiers for one category. For example:
+
+```
+ids= {'d1609010850spike11','d1609010929spike11','d1609011131spike11'}
+```
+
+Then run:
+
+```
+populationrates(ids,directory)
+```
+
+This will plot the firing rates of all the neurons in the _ids_ list. Notice that you have to specify the directory where the matfiles of those neurons are. 
+
+If you don't want the plot and want the vectors instead, run:
+
+frates = populationrates(ids,directory);
+
+Again, by default the align event is the stimulus onset and you can change that as the _fratenorm_ function described above.
+

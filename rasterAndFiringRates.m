@@ -9,6 +9,15 @@ function [] = rasterAndFiringRates(e,spk,varargin)
 % Settings para la tasa de disparo
 samples = getArgumentValue('samples',-0.5:0.1:1,varargin{:});
 tau = getArgumentValue('tau',0.05,varargin{:});
+alignEvents = getArgumentValue('alignEvents',{'manosFijasIni','touchIni', 'robMovIni'},varargin{:});
+endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...
+            {'touchCueIni','manosFijasFin','robMovIni'},...
+            {'robMovFin', 'touchCueFin', 'targOn', 'targOff'}},varargin{:});
+labels = getArgumentValue('labels',{'Wait', 'Contact', 'Stim On'},varargin{:});
+rasterlimits = getArgumentValue('rasterlimits',[-0.5, 2;-2,0.8;-0.3,0.3],varargin{:});
+sortedBy = getArgumentValue('sortedBy','anguloRotacion',varargin{:});
+
+printraster = getArgumentValue('printraster',1);
 timestep = getArgumentValue('timestep',1.3,varargin{:});
 praster = getArgumentValue('rasterposition',[0.13,0.23,0.775,0.7],varargin{:});
 prate = getArgumentValue('frateposition',[0.13,0.05,0.775,0.17],varargin{:});
@@ -34,7 +43,8 @@ e = eslice(e, slice);
 % Tiempos en los que inicia cada alineaci�n en el raster. Necesario
 % para alinear la gr�fica de tasa de disparo.
 subplot(2,1,1);
-maxtime = alleventsraster(e, spk,'printraster',0);
+maxtime = alleventsraster(e, spk,'alignEvents',alignEvents,'endEvents',endEvents,'labels',labels,...
+                        'rasterlimits',rasterlimits,'sortedBy',sortedBy,'printraster',0);
 maxtime = maxtime(1:length(alignEvents));
 rasterxlim = get(gca, 'xlim');
 % Crar subplots con dimensiones modificadas para que el raster se vea

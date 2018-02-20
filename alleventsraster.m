@@ -44,6 +44,7 @@ endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...
             {'robMovFin', 'touchCueFin', 'targOn', 'targOff'}},varargin{:});
 labels = getArgumentValue('labels',{'Wait', 'Contact', 'Stim On'},varargin{:});
 rasterlimits = getArgumentValue('rasterlimits',[-0.5, 2;-2,0.8;-0.3,0.3],varargin{:});
+sortedBy = getArgumentValue('sortedBy','anguloRotacion',varargin{:});
 printraster = getArgumentValue('printraster',1);
 
 %%
