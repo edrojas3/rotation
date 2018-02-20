@@ -41,12 +41,25 @@ rotations = round([aligned.events.anguloRotacion]*10)/10;
 if bothways == 1;
     leftindex = ismember(rotations,abs(A));
     rightindex = ismember(rotations,-abs(A));
-    leftFR = nanmean(frdetrended(leftindex,:));
-    rightFR = nanmean(frdetrended(rightindex,:));
+    if sum(leftindex) > 1;
+        leftFR = nanmean(frdetrended(leftindex,:));
+    else
+        leftFR = frdetrended(leftindex,:);
+    end
+    if sum(rightindex)>1;
+        rightFR = nanmean(frdetrended(rightindex,:));
+    else
+        rightFR = frdetrended(rightindex,:);
+    end
     frdetrended = [leftFR;rightFR];
 else
     index = ismember(rotations,A);
-    frdetrended = nanmean(frdetrended(index,:));
+    if sum(index)>1;
+        frdetrended = nanmean(frdetrended(index,:));
+    else
+        frdetrended = frdetrended(index,:);
+    end
+    
 end
 
 
