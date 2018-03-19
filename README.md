@@ -114,3 +114,6 @@ frates = populationrates(ids,directory);
 
 Again, by default the align event is the stimulus onset and you can change that as the _fratenorm_ function described above.
 
+# Single Trials
+Now singleTrials function is available.
+# ROC 

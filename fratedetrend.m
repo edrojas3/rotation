@@ -6,6 +6,7 @@ bothways = getArgumentValue('bothways',1,varargin{:});
 hits = getArgumentValue('hits',1,varargin{:});
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 tau = getArgumentValue('tau',0.5,varargin{:});
+singleTrials = getArgumentValue('singleTrials',1,varargin{:});
 attrit = [samples(1),samples(end)];
 
 % Remove noisy trials
@@ -37,29 +38,31 @@ for tr = 1:size(frates,1);
 end
 
 % Trial and rotations order
-rotations = round([aligned.events.anguloRotacion]*10)/10;
-if bothways == 1;
-    leftindex = ismember(rotations,abs(A));
-    rightindex = ismember(rotations,-abs(A));
-    if sum(leftindex) > 1;
-        leftFR = nanmean(frdetrended(leftindex,:));
+if singleTrials == 0;
+    rotations = round([aligned.events.anguloRotacion]*10)/10;
+    if bothways == 1;
+        leftindex = ismember(rotations,abs(A));
+        rightindex = ismember(rotations,-abs(A));
+        if sum(leftindex) > 1;
+            leftFR = nanmean(frdetrended(leftindex,:));
+        else
+            leftFR = frdetrended(leftindex,:);
+        end
+        if sum(rightindex)>1;
+            rightFR = nanmean(frdetrended(rightindex,:));
+        else
+            rightFR = frdetrended(rightindex,:);
+        end
+        frdetrended = [leftFR;rightFR];
     else
-        leftFR = frdetrended(leftindex,:);
+        index = ismember(rotations,A);
+        if sum(index)>1;
+            frdetrended = nanmean(frdetrended(index,:));
+        else
+            frdetrended = frdetrended(index,:);
+        end
     end
-    if sum(rightindex)>1;
-        rightFR = nanmean(frdetrended(rightindex,:));
-    else
-        rightFR = frdetrended(rightindex,:);
-    end
-    frdetrended = [leftFR;rightFR];
-else
-    index = ismember(rotations,A);
-    if sum(index)>1;
-        frdetrended = nanmean(frdetrended(index,:));
-    else
-        frdetrended = frdetrended(index,:);
-    end
-    
+
 end
 
 
