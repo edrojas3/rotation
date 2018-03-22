@@ -1,44 +1,57 @@
-% clear all
-close all
-clc
-
-load 'C:\Users\eduardo\Documents\proyectos\rotacion\matfiles\rocStep10Tau500'
-lhits = {ROC.leftPreference.leftVSright.index};
-lerrs = {ROC.rightPreference.leftHitsVSleftErr.index};
-rhits = {ROC.rightPreference.leftVSright.index};
-rerrs = {ROC.rightPreference.rightHitsVSrightErr.index};
+function [rocmean, rocmat] = rocIndexGraphs(rocstruct,rocfield,varargin)
+%
+% rocIndexGraphs() function that calculates the average of the roc indexes
+% for the specified magnitudes. If not output is requested, the function
+% plots the roc indexes.
+%
+% rocIndexGraphs(rocstruct,rocfield)
 
 % set rotation magnitudes
-A = [0.1,0.2,0.4,0.8,1.6,3.2];
-% A = [0.1,0.2,0.4];
-% A = [0.8,1.6,3.2];
+A = getArgumentValue('angles',4:6,varargin{:});
+plotType = getArgumentValue('plotType','mean',varargin{:});
+color = getArgumentValue('color','k',varargin{:});
 lenA = length(A);
-timeSec = -0.5:0.001:1;
-timeSec = -0.5:0.01:1;
+timeSec = rocstruct.timeSec;
 
-glevel = linspace(0.2,0.8,lenA);
-b = [zeros(lenA,1), glevel', ones(lenA,1)];
-r = [ones(lenA,1), glevel', zeros(lenA,1)];
-g = [zeros(lenA,1), glevel', zeros(lenA,1)];
-
-
-% subplot(1,2,1)
-
-for a = 1:length(A)
-    plot(timeSec,nanmean(lhits{a}), 'color', b(a,:),'linewidth',2); hold on
-    plot(timeSec,nanmean(rhits{a}), 'color', r(a,:),'linewidth',2); hold on
+if strcmp(plotType,'individual')
+    datacell = {rocstruct.(rocfield).index};
+    glevel = linspace(0.2,0.8,lenA);
+    b = [zeros(lenA,1), glevel', ones(lenA,1)];
+    r = [ones(lenA,1), glevel', zeros(lenA,1)];
+    g = [zeros(lenA,1), glevel', zeros(lenA,1)];
+    k = [glevel',glevel',glevel'];
+    eval(['color = eval(color);'])
+    for a = 1:lenA
+        plot(timeSec,nanmean(datacell{A(a)}), 'color', color(a,:),'linewidth',2); hold on
+    end
+elseif strcmp(plotType, 'mean')
+    rocmat = [];
+    N = size(rocstruct.(rocfield)(A(1)).index,1);
+    for n = 1:N
+        rocperneuron = [];
+        for a = 1:lenA
+           rocperangle = rocstruct.(rocfield)(A(a)).index(n,:);
+           rocperneuron = [rocperneuron;rocperangle];
+        end
+        if lenA > 1;
+            rocmat = [rocmat;nanmean(rocperneuron)];
+        else
+            rocmat = [rocmat;rocperneuron];
+        end
+    end
+    rocmean = nanmean(rocmat);
+    
+    if nargout == 0;
+        if color == 'b';
+            lightcolor = [0.5,0.5,1];
+        elseif color == 'r';
+            lightcolor = [1,0.5,0.5];
+        else
+            lightcolor = [0.5,0.5,0.5];
+        end
+        
+        plot(timeSec,rocmat,'color',lightcolor)
+        hold on
+        plot(timeSec,rocmean,'color',color,'linewidth',3)
+    end
 end
-set(gca,'ylim',[0,1],'box','off')
-xlabel('Time from stimulus onset'), ylabel('ROC index')
-axis square
-shg
-% title('Hits')
-% subplot(1,2,2)
-% 
-% for a = 1:3
-%     plot(timeSec,nanmean(lerrs{a}), 'color', b(a,:),'linewidth',2); hold on
-%     plot(timeSec,nanmean(rerrs{a}), 'color', r(a,:),'linewidth',2); hold on
-% end
-% set(gca,'ylim',[0,1])
-% title('Left Preference Neurons (hits vs err for 0.1, 0.2, and 0.4 rotations)')
-% legend('left hits vs left err', 'right hits vs right err' )

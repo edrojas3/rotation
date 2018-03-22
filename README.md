@@ -114,6 +114,29 @@ frates = populationrates(ids,directory);
 
 Again, by default the align event is the stimulus onset and you can change that as the _fratenorm_ function described above.
 
-# Single Trials
-Now singleTrials function is available.
-# ROC 
+## ROC index as a function of time
+Before calculating the ROC index it is necessary to obtain the firing rate of single trials for each neuron. To do this run:
+
+```
+leftST = singleTrialsFR(leftidlist, matfilesdir);
+rightST = singleTrialsFR(rightidlist, matfilesdir);
+```
+
+Note that in the example the function is run twice, one for each direction of rotation. For both lines of code the _idlist_ input must be a cell array with the identifiers of the neuron. For example: leftidlist = {'c1607191159spike11', 'd1610101345spike51'}. The _matfilesdir_ is the path where the matfiles containing the neuron iformation is located. 
+
+The output of the function is a structure where you can find the single trials' firing rates of each neuron. Each subindex of the structure is the information of each neuron and it contains the raw, z-scored, and detrended firing rates in separate fields. Also the magnitude of rotation is included and if the trial was a hit (1) or not (0).
+
+## ROC index
+
+To obtain the ROC index as a function of time run:
+
+```
+rocleft = ROCinTime(leftST);
+rocright = ROCinTime(rightST);
+```
+The function ROCinTime needs the output from the singleTrialsFR function described above. The output is another structure with the roc index as a function of time. The function calculates the roc index comparing clockwise and counter clockwise rotations of the same magnitude. Thus, the length of the structure must be equal to 6, being 1 the smallest magnitude and 6 the biggest. The subfields of the structures are:
+1. index: matrix of n x m. Where n is the number of neurons, and m the number of time samples. 
+2. lag: the number of sample in which the index became statisticaly significant.
+3. ci: confidence interval values. 
+
+

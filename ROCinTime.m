@@ -1,4 +1,16 @@
 function ROC = ROCinTime(singleTrials,varargin)
+%
+% ROCinTime() is a function that stores the rocindex values in a structure.
+% The function calculates the roc index values for clockwise and counter clockwise rotations of the
+% same magnitude , the confidence intervals of each time sample, and in which sample the index is
+% statisticaly significant.
+%
+% roc = rocintime(singleTrials)
+% singleTrials = structure with single trials firing rate of each neuron.
+% For more details see singleTrialsFR function.
+% 
+% For more details about the calculation of the roc index see the rocindex
+% function.
 
 % set rotation magnitudes
 A = getArgumentValue('angles',[.1,.2,.4,.8,1.6,3.2],varargin{:});
@@ -6,6 +18,7 @@ A = getArgumentValue('angles',[.1,.2,.4,.8,1.6,3.2],varargin{:});
 % roc settings
 alpha = getArgumentValue('alpha',0.05,varargin{:});
 bins = getArgumentValue('bins',10,varargin{:});
+timeSec = singleTrials.timeSec;
 
 % variable prealocation
 lROC = cell(1,length(A));
@@ -70,5 +83,5 @@ ROC.leftVSright = struct('index',lROC,'lags',lLag,'ci',lCI);
 ROC.leftHitsVSleftErr = struct('index',lrotROCE,'lags',lrotLagE,'ci',lrotCIE);
 ROC.rightHitsVSrightErr = struct('index',rrotROCE,'lags',rrotLagE,'ci',rrotCIE);
 ROC.ids = ID;
-ROC.timeSec = singleTrials.timeSec;
+ROC.timeSec = timeSec;
 

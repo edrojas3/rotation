@@ -1,4 +1,14 @@
 function singleTrials = singleTrialsFR(idlist, matfilesdir,varargin)
+% singleTrialsFR() creates a structure with the firing rate of single
+% trials of the indicated neurons.
+%
+% singleTrialsStruct = singleTrialsFR(idlist,matfiles)
+% idlist = cell array with the neuron identifiers. For example: 
+%          idlist = {'c1607191054spike11', 'd1610101134spike12'};
+% matfiles = string of the path where the mat files with neuron data are
+% found.
+%
+
 
 % Initial trial settings
 alignEvent = getArgumentValue('alignEvent', 'robMovIni',varargin{:});
