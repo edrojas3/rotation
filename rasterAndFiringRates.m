@@ -7,7 +7,7 @@ function [] = rasterAndFiringRates(e,spk,varargin)
 
 
 % Settings para la tasa de disparo
-samples = getArgumentValue('samples',-0.5:0.1:1,varargin{:});
+samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 tau = getArgumentValue('tau',0.05,varargin{:});
 alignEvents = getArgumentValue('alignEvents',{'manosFijasIni','touchIni', 'robMovIni'},varargin{:});
 endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...

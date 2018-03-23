@@ -21,8 +21,8 @@ A = getArgumentValue('angles',[0.1,0.2,0.4,0.8,1.6,3.2],varargin{:});
 bothways = getArgumentValue('bothways',1,varargin{:});
 hits = getArgumentValue('hits',1,varargin{:});
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
-singleTrials = getArgumentValue('singleTrials',1,varargin{:});
-tau = getArgumentValue('tau',0.5,varargin{:});
+singleTrials = getArgumentValue('singleTrials',0,varargin{:});
+tau = getArgumentValue('tau',0.05,varargin{:});
 attrit = [samples(1),samples(end)];
 normindex = find(samples <= 0);
 
@@ -39,47 +39,46 @@ e = eslice(e, slice);
 if hits == 0 || hits == 1;
     aligned = selectTrials(e, 'alignEvent', alignEvent,'aciertos',hits,'delnotfound', 1);
 else
+    warning('Ignoring hit input; invalid argument value.')
     aligned = selectTrials(e, 'alignEvent', alignEvent,'delnotfound', 1);
 end
 spks = {aligned.spikes.(spk)};
+rotations = round([aligned.events.anguloRotacion]*10)/10;
 
 % Get firing rates
-frates = firingrate(spks, samples, 'FilterType', 'exponential', 'TimeConstant', tau, 'attrit', attrit);
-
-% Normalization of frates (z score to samples previous to align event)
-normfrate = zeros(size(frates));
-for tr = 1:size(frates,1)
-    lbmean = mean(frates(tr,normindex));
-    lbstd   = std(frates(tr,normindex));
-    normfrate(tr,:) = (frates(tr,:) - lbmean) / lbstd;
+if bothways == 0;
+    normfrate = cell(1,length(A));
+else
+    normfrate = cell(2,length(A));
 end
+for ang = 1:length(A)
+    frates = firingrate({spks{rotations == A(ang)}}, samples, 'FilterType', 'exponential', 'TimeConstant', tau, 'attrit', attrit);
 
-% Trial and rotations order
-if singleTrials == 0;
-    rotations = round([aligned.events.anguloRotacion]*10)/10;
+    if ~(isempty(frates));
+        if size(frates,1) == 1;
+            frmean = frates;
+        else
+            frmean = nanmean(frates);
+        end
+        frnorm = (frmean - nanmean(frmean(normindex))) / std(frmean(normindex));
+       normfrate{1, ang} = frnorm;
+    end
+    
     if bothways == 1;
-        leftindex = ismember(rotations,abs(A));
-        rightindex = ismember(rotations,-abs(A));
-        if sum(leftindex) > 1;
-            leftFR = nanmean(normfrate(leftindex,:));
-        else
-            leftFr = normfrate(leftindex,:);
-        end
-        if sum(rightindex)>1;
-            rightFR = nanmean(normfrate(rightindex,:));
-        else
-            rightFr = normfrate(rightindex,:);
-        end
-        normfrate = [leftFR;rightFR];
-    else
-        index = ismember(rotations,A);
-        if sum(index) > 1;
-            normfrate = nanmean(normfrate(index,:));
-        else
-            normfrate = normfrate(index,:);
+        fratesInverse = firingrate({spks{rotations == -A(ang)}}, samples, 'FilterType', 'exponential', 'TimeConstant', tau, 'attrit', attrit);
+
+        if ~(isempty(fratesInverse));
+            if size(fratesInverse,1) == 1;
+                frInverseMean = fratesInverse;
+            else
+                frInverseMean = nanmean(fratesInverse);
+            end
+            frInverseNorm = (frInverseMean - nanmean(frInverseMean(normindex))) / std(frInverseMean(normindex));
+            normfrate{2, ang} = frInverseNorm;
         end
     end
 end
+
 
 % Plot firing rates
 if nargout == 0;

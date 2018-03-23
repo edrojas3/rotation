@@ -64,7 +64,7 @@ Once you run the function from above, you will get a figure divided in two. The 
 	3. Stimulus onset
 In the raster plot time is in the _x_ axis and in the _y_ axis are the trials ordered by stimulus magnitude. The trials where the stimulus rotated to the right are in the bottom half of the raster plot. The black marks are the times where an action potential occurred time locked to the 3 aligning events (green straight lines). The other colored markers are the events that happened near the aligning events.
 
-The firing rate is plotted at the bottom of the figure separated by left (blue traces) and right (red traces) rotations. To obtained the firing rate we used an exponential window with a decay constant (tau) of 0.05 ms and step movements 0f 0.1 ms.
+The firing rate is plotted at the bottom of the figure separated by left (blue traces) and right (red traces) rotations. To obtained the firing rate we used an exponential window with a decay constant (tau) of 0.05 s and step movements 0f 0.01 s.
 
 Only correct trials were used for both plots.
 

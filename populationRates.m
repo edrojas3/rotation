@@ -1,4 +1,4 @@
-function [poprates, samples] = populationRates(ids,directory,varargin)
+function [poprates, samples, FR] = populationRates(ids,directory,varargin)
 % Uses the files in a directory to get the population firing rates
 % USAGE: 
 % [poprates, samples] = populationRates(ids,directory)
@@ -30,8 +30,8 @@ end
 
 poprates = cell(2,6);
 for c = 1:6
-   poprates{1,c} = [poprates{1,a};nanmean(FR{1,c})];
-   poprates{2,c} = [poprates{2,a};nanmean(FR{2,c})];
+   poprates{1,c} = [poprates{1,a};nanmean(cell2mat(FR{1,c}))];
+   poprates{2,c} = [poprates{2,a};nanmean(cell2mat(FR{2,c}))];
 end
 
 if nargout == 0
