@@ -3,7 +3,7 @@ function [normfrate,samples] = fratenorm(e,spk,varargin)
 %
 % Usage: 
 % [normfrate,samples] = fratenorm(e,spk)
-% fratenorm(e,spk) % plots the normalized firing rates
+% fratenorm(e,spk)  plots the normalized firing rates
 % 
 % To obtain the firing rates the function uses an exponential window with a
 % constant decay of 0.5 ms and moving steps of 0.1 ms. The normalization is
@@ -19,6 +19,7 @@ function [normfrate,samples] = fratenorm(e,spk,varargin)
 alignEvent = getArgumentValue('alignEvent','robMovIni',varargin{:});
 A = getArgumentValue('angles',[0.1,0.2,0.4,0.8,1.6,3.2],varargin{:});
 bothways = getArgumentValue('bothways',1,varargin{:});
+normMean = getArgumentValue('normMean',1,varargin{:});
 hits = getArgumentValue('hits',1,varargin{:});
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 singleTrials = getArgumentValue('singleTrials',0,varargin{:});
@@ -26,6 +27,9 @@ tau = getArgumentValue('tau',0.05,varargin{:});
 attrit = [samples(1),samples(end)];
 normindex = find(samples <= 0);
 
+if ischar(e)
+    load(e)
+end
 
 % Remove noisy trials
 if isfield(e,'slice')
@@ -83,9 +87,24 @@ end
 % Plot firing rates
 if nargout == 0;
     if bothways == 1;
-        plot(samples,normfrate(1,:),'linewidth',3,'color','b'); hold on
-        plot(samples,normfrate(2,:),'linewidth',3,'color','r')
-        legend('Left','Right')
+        if normMean
+            izq = mean(cell2mat(normfrate(1,:)'));
+            der = mean(cell2mat(normfrate(2,:)'));
+            plot(samples,izq,'linewidth',3,'color','b'); hold on
+            plot(samples,der,'linewidth',3,'color','r')
+            legend('Left','Right')
+        else
+            lenA = length(A);
+            glevel = linspace(0,1,lenA);
+            b = [zeros(lenA,1), glevel', ones(lenA,1)];
+            r = [ones(lenA,1), glevel', zeros(lenA,1)];
+            g = [zeros(lenA,1), glevel', zeros(lenA,1)];
+
+            for n = 1:lenA
+                plot(samples,normfrate{1,n},'linewidth',2,'color',b(n,:)); hold on
+                plot(samples,normfrate{2,n},'linewidth',2,'color',r(n,:))
+            end           
+        end
     else
         plot(samples, normfrate,'linewidth',3,'color',[0.8,0.8,0.8]);
     end

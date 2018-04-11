@@ -75,7 +75,7 @@ For normalizing (z-score) the firing rates run:
 [frnorm, timesec] = fratenorm(e,spk);
 ```
 
-The previous function gets the firing rate aligned to the stimulus onset as a default. To change this you can specify the align event you want. For example, to get the firing rate aligned to the moment when the monkey touched the object you can run:
+The input 'e' is a loaded structure of a matfile with neuronal data and 'spk' is the name of the unit you want. The previous function gets the firing rate aligned to the stimulus onset as a default. To change this you can specify the align event you want. For example, to get the firing rate aligned to the moment when the monkey touched the object you can run:
 
 ```
 [frnorm, timesec] = fratenorm(e,spk,'alignEvent','touchIni');
