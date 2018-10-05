@@ -1,4 +1,8 @@
 function e = addlfp(e,path2ns)
+% Añade el lfp a la estructura.
+%
+% e = addlfp(e,directorioDeArchivosNS2)
+%
 
 % Cargar archivo NS2 con los datos de LFP
 id = e.ArchivoNEV(1:end-4);
