@@ -23,7 +23,7 @@ normMean = getArgumentValue('normMean',1,varargin{:});
 hits = getArgumentValue('hits',1,varargin{:});
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 singleTrials = getArgumentValue('singleTrials',0,varargin{:});
-tau = getArgumentValue('tau',0.05,varargin{:});
+tau = getArgumentValue('tau',0.5,varargin{:});
 attrit = [samples(1),samples(end)];
 normindex = find(samples <= 0);
 

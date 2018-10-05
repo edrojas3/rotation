@@ -61,13 +61,13 @@ for i = 1:2:length(varargin)
    val = varargin{i+1};
    switch campo
        case 'anguloInicio' 
-           ai = [trials.anguloInicio]' == val;
+           ai = round(10*[trials.anguloInicio]')/10;
+           ai = ismember(ai,val);
        case 'anguloRotacion'
-           ar = [trials.anguloRotacion]' ;
-           ar = round(ar*10);
-           ar = ar == round(val*10);
+           ar = round(10*[trials.anguloRotacion])/10;
+           ar = ismember(ar,val)';
        case 'anguloTarg'
-           at = [trials.angTar]' == val;
+           at = round(10*[trials.angTar]')/10 == val;
        case 'respMono'
            resp = [trials.respMono]' == val;
        case 'valResp'
@@ -104,7 +104,9 @@ del = [];
 if ~(strcmp(alignEvent, 'noAlign'));
     for n = 1:length(events)
         if isfield(events, 'robMovIni');
-            if isempty(events(n).robMovIni); disp(['No info found in trial ', num2str(n)]); del(n) = n; continue; end
+            if isempty(events(n).robMovIni);
+%                 disp(['No info found in trial ', num2str(n)]); 
+                del(n) = n; continue; end
         end
         alignTime = events(n).(alignEvent);
         events(n).cmdIni            = events(n).cmdIni - alignTime;

@@ -5,7 +5,7 @@ signalFilt = getArgumentValue('signalFilt',0, varargin{:});
 for n = 1:length(e.trial);
     signal = double(e.trial(n).robSignal);
     if signalFilt;
-        signal = filtsignal(signal, 15, 70);
+        signal = filtSant(signal, 15, 70); % Not recommended.
     end
     ts = e.trial(n).robTimeSec;
 

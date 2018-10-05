@@ -58,8 +58,11 @@ if singleTrials == 0;
         index = ismember(rotations,A);
         if sum(index)>1;
             frdetrended = nanmean(frdetrended(index,:));
-        else
+        elseif sum(index) == 1
             frdetrended = frdetrended(index,:);
+        elseif sum(index) == 0
+            frdetrended = nan(1,length(samples));
+            warning('No firing rates found for the specified conditions.')
         end
     end
 
