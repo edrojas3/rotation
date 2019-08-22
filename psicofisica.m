@@ -1,37 +1,27 @@
-function [p_izq, A] = psicofisica(matdir)
-files = dir([matdir,filesep,'*.mat']);
+function [p_izq,R, A] = psicofisica(idlist,matdir)
 A = [0.1,0.2,0.4,0.8,1.6,3.2];
 A = sort([-A,A]);
 
-R = cell(2,length(A));
+R = cell(1,length(A));
 
-for f = 1:length(files)
-    load([matdir,filesep,files(f).name])
-    mono = files(f).name(1);
+for f = 1:length(idlist)
+    load([matdir,filesep,idlist{f}])
     session_angs = [e.trial.anguloRotacion];
     session_angs = round(session_angs*10) / 10;
     for angulo = 1:length(A)
         selected_angle = session_angs == A(angulo);
         respuesta = [e.trial(selected_angle).respuesta]';
-        if mono == 'd';
-            R{1,angulo} = [R{1,angulo}; respuesta];
-        else
-            R{2,angulo} = [R{2,angulo}; respuesta];
-        end
-        
+        R{1,angulo} = [R{1,angulo}; respuesta];
     end
 end
 
 %% Calcular la probabilidad de contestar izquierda
-p_izq = zeros(2,length(A));
+p_izq = zeros(1,length(A));
 
 for r = 1:length(R)
    n1 = length(R{1,r}) ;
-   n2 = length(R{2,r}) ;
    izq_resps1 = R{1,r} == 1;
-   izq_resps2 = R{2,r} == 1;
    p_izq(1,r) = sum(izq_resps1)/n1;
-   p_izq(2,r) = sum(izq_resps2)/n2;
 end
 
 %%

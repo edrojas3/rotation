@@ -34,10 +34,10 @@ ID = {};
 
 for s = 1:length(singleTrials)
    hits = singleTrials(s).hits ;
-   frH = singleTrials(s).fratesDetrend(hits==1,:);
+   frH = singleTrials(s).fratesDetNorm(hits==1,:);
    rotations = singleTrials(s).rotations(hits==1);
    
-   frE = singleTrials(s).fratesDetrend(hits==0,:);
+   frE = singleTrials(s).fratesDetNorm(hits==0,:);
    rotationsE = singleTrials(s).rotations(hits==0);
    
    for a = 1:length(A)

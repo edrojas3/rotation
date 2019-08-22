@@ -1,15 +1,15 @@
 close all; clear all; clc
 
 % files with coordinates
-matdir = 'C:\Users\eduardo\Documents\proyectos\rotacion\matfiles\registros';
-matfiles = dir([matdir, '\*.mat']);
+matdir = 'C:\Users\Usuario\Documents\datos\rotacion\matfiles\recordings';
+matfiles = dir([matdir,filesep,'*.mat']);
 
 % Coordinates per monkey
 C = [];
 D = [];
 A = [];
 for f = 1:length(matfiles)
-    load([matdir, '\',matfiles(f).name])
+    load([matdir, filesep,matfiles(f).name])
 
     canulas = repmat(e.canulas.coordenadas(1:2),3,1);
     electrodos = [e.electrodos.profundidad - e.electrodos.corteza]'/1000;
@@ -32,7 +32,7 @@ grid on
 %% Coordinates of neurons with rotation preference
 
 % list of preference neurons and ids
-load 'C:\Users\eduardo\Documents\proyectos\rotacion\matfiles\preferenceList'
+load 'C:\Users\Usuario\Documents\datos\rotacion\matfiles\preferenceList'
 
 % ids of preference neurons
 lp = find(preference == 1);
@@ -44,7 +44,7 @@ L = [];
 R = [];
 for pp = 1:length(pids)
   fname = pids{pp}(1:11);
-   load([matdir,'\',fname])
+   load([matdir,filesep,fname])
    % coordinates of the recording session
    canulas = repmat(e.canulas.coordenadas(1:2),3,1);
    electrodos = [e.electrodos.profundidad - e.electrodos.corteza]'/1000;
@@ -70,7 +70,7 @@ Lr = L+r;
 r = -.08 + (.16)*rand(size(R));
 Rr = R+r;
 ms = 10;
-plot3(Ar(:,1),Ar(:,2),Ar(:,3),'.', 'color',[0.5,0.5,0.5],'markersize',ms); hold on
+plot3(Ar(:,1),Ar(:,2),Ar(:,3),'.', 'color',[0.8,0.8,0.8],'markersize',ms-5); hold on
 plot3(Lr(:,1),L(:,2),L(:,3),'.b','markersize',ms+10)
 plot3(Rr(:,1),R(:,2),R(:,3),'.r','markersize',ms+10)
 xlabel('lateral-medial'); ylabel('anterior-posterior'); zlabel('depth')

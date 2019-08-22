@@ -11,7 +11,7 @@ if exist([file,'.nev'],'file')
 else
     error([file, 'not found.'])
 end
- 
+
 e = blackRock2event(nevData,ns1File);
 if isstruct(e)
     e = addRobMarkers(e);

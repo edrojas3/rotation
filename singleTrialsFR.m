@@ -14,7 +14,7 @@ function singleTrials = singleTrialsFR(idlist, matfilesdir,varargin)
 alignEvent = getArgumentValue('alignEvent', 'robMovIni',varargin{:});
 
 % Firing rate parameters
-samples = getArgumentValue('timeSamples',-0.5:0.01:1,varargin{:});
+samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 tau = getArgumentValue('tau',0.5,varargin{:});
 
 attrit = [samples(1),samples(end)];
@@ -51,8 +51,10 @@ for f = 1:length(idlist) % Loop for every recording session
     frates(check4zero == 0,:) = nan;
     fratesMean = nanmean(frates);
     fratesDetrend = zeros(size(frates));
+    fratesDetNorm = zeros(size(frates));
     for tr = 1:size(frates,1);
         fratesDetrend(tr,:) = frates(tr,:) - fratesMean;
+        fratesDetNorm(tr,:) = ( fratesDetrend(tr,:) - mean(fratesDetrend(tr,normindex)) ) / std(fratesDetrend(tr,normindex));
     end
     
     % Normalization of frates (z score to samples previous to align event)
@@ -68,7 +70,8 @@ for f = 1:length(idlist) % Loop for every recording session
     hits = [aligned.events.correcto];
     
     singleTrials(f) = struct('frates',frates,'fratesDetrend', fratesDetrend,...
-                    'fratesNorm', fratesNorm, 'rotations', rotations,'hits',hits, 'id', [id,spk],'timeSec',samples);
+                    'fratesNorm', fratesNorm,'fratesDetNorm',fratesDetNorm,...
+                    'rotations', rotations,'hits',hits, 'id', [id,spk],'timeSec',samples);
 
 end
 

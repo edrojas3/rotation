@@ -8,7 +8,7 @@ function [] = rasterAndFiringRates(e,spk,varargin)
 
 % Settings para la tasa de disparo
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
-tau = getArgumentValue('tau',0.05,varargin{:});
+tau = getArgumentValue('tau',0.2,varargin{:});
 alignEvents = getArgumentValue('alignEvents',{'manosFijasIni','touchIni', 'robMovIni'},varargin{:});
 endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...
             {'touchCueIni','manosFijasFin','robMovIni'},...
@@ -42,17 +42,18 @@ e = eslice(e, slice);
 
 % Tiempos en los que inicia cada alineaci�n en el raster. Necesario
 % para alinear la gr�fica de tasa de disparo.
-subplot(2,1,1);
+rasplot = subplot(2,1,1);
 maxtime = alleventsraster(e, spk,'alignEvents',alignEvents,'endEvents',endEvents,'labels',labels,...
-                        'rasterlimits',rasterlimits,'sortedBy',sortedBy,'printraster',0);
+                        'rasterlimits',rasterlimits,'sortedBy',sortedBy,'printraster',1);
 maxtime = maxtime(1:length(alignEvents));
-rasterxlim = get(gca, 'xlim');
+rasterxlim = get(rasplot, 'xlim');
+title([id,spk])
+
 % Crar subplots con dimensiones modificadas para que el raster se vea
 % m�s grande que la tasa de disparo.
 %     subplot(2,1,1, 'position', praster);
 
-subplot(2,1,2);
-set(gca, 'position', prate)
+frateplot = subplot(2,1,2);
 for ae = 1:length(alignEvents)
 
     % Alineaci�n de los ensayos 
@@ -112,16 +113,15 @@ end
 
 xlim = [-0.3,  max(time_axis - timestep)];
 ylim = [min(minrate), max(maxrate)];
-set(gca, 'xlim', rasterxlim, 'ylim', ylim, 'box', 'off','xtick', maxtime, 'xticklabel', zeros(length(maxtime),1))
+set(frateplot, 'xlim', rasterxlim, 'ylim', ylim, 'box', 'off')%,'xtick', maxtime, 'xticklabel', zeros(length(maxtime),1))
 % Marcadores de los eventos de alineaci�n 
-line([maxtime; maxtime], repmat(ylim',1,length(maxtime)), 'color', 'k', 'linewidth', 1.5)
+line([maxtime; maxtime], repmat(ylim',1,length(maxtime)), 'color', 'g', 'linewidth', 1.5)
 
 % Raster. Por alg�n motivo desaparece si lo grafico antes de la tasa
 % del c�digo que calcula la tasa de disparo.
-subplot(2,1,1);
-set(gca, 'position', praster)
-alleventsraster(e, spk,'anguloRotacion', {alignEvents{1:end}}, endEvents, labels,rasterlimits,1);
-set(gca, 'xlim', rasterxlim)
-title([id,spk])
+set(frateplot, 'position', prate)
+set(rasplot, 'position', praster,'xlim', rasterxlim)
+% alleventsraster(e, spk,'anguloRotacion', {alignEvents{1:end}}, endEvents, labels,rasterlimits,1);
+% set(gca, )
 
 

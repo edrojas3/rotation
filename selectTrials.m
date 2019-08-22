@@ -36,7 +36,6 @@ function selected = selectTrials(e,varargin)
 delnotfound = getArgumentValue('delnotfound', 1, varargin{:});
 
 % Condiciones por las cuales se pueden filtrar los datos
-
 trials = e.trial;
 
 if isfield(e,'spikes');
@@ -56,7 +55,6 @@ aciertos = ones(length(trials),1);
 
 % Vectores lógicos de los ensayos que tienen lo que quieres
 for i = 1:2:length(varargin)
-    
    campo = varargin{i};
    val = varargin{i+1};
    switch campo
@@ -91,7 +89,6 @@ end
 % Operacion lógica AND para obtener un vector lógico con los índices de los
 % ensayos que tienen lo que quieres
 filter = ai.*ar.*at.*resp.*vr.*vel.*rotdir.*aciertos;
-
 % Filtrar los ensayos
 events = trials(filter == 1);
 
@@ -100,6 +97,7 @@ if isfield(e,'spikes');
 end
 % Alinear los tiempos a un evento
 alignEvent  = getArgumentValue('alignEvent','noAlign',varargin{:});
+
 del = [];
 if ~(strcmp(alignEvent, 'noAlign'));
     for n = 1:length(events)

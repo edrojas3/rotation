@@ -1,7 +1,7 @@
 function [rocmean, rocmat] = rocIndexGraphs(rocstruct,rocfield,varargin)
 %
 % rocIndexGraphs() function that calculates the average of the roc indexes
-% for the specified magnitudes. If not output is requested, the function
+% for the specified magnitudes. If no output is requested, the function
 % plots the roc indexes.
 %
 % rocIndexGraphs(rocstruct,rocfield)

@@ -45,7 +45,7 @@ endEvents = getArgumentValue('endEvents',{{'manosFijasIni'},...
 labels = getArgumentValue('labels',{'Wait', 'Contact', 'Stim On'},varargin{:});
 rasterlimits = getArgumentValue('rasterlimits',[-0.5, 2;-2,0.8;-0.3,0.3],varargin{:});
 sortedBy = getArgumentValue('sortedBy','anguloRotacion',varargin{:});
-printraster = getArgumentValue('printraster',1);
+printraster = getArgumentValue('printraster',1,varargin{:});
 
 %%
 id = e.ArchivoNEV(1:end-4);
@@ -167,6 +167,7 @@ for i = 1:size(xticks,1)
     end
 end
 
+
 if printraster
 
     if strcmp(sortedBy, 'anguloInicio')
@@ -183,14 +184,22 @@ if printraster
         elseif strcmp(alignEvents{ex}, 'touchIni');
             color = {'m','b','c','y'};
         elseif strcmp(alignEvents{ex}, 'robMovIni');
-            color = {'b','r','y','m','g','r'};
-%             color = {[243/255,0,104/255],[1,1,0],[82/255,38/255,181/255],[213/255,1,69/255],[32/255,0,1],[0,1,177/255]};
+%             color = {'b','r','y','m','g','r'};
+%             color = {[243,0,104]./255,[1,1,0],[82,38,181]./255,[213/255,1,69/255],[32/255,0,1],[0,1,177/255]};
+            color = {[2,166,118]./255,[0,140,114]./255,[0,115,105]./255,[0,90,91]./255,[0,56,64]./255};
         else
             color = {'b','c','y','m','c','r'};
         end
   
         for l = 1:size(end_xmarkers{ex},2) 
-           plot(end_xmarkers{ex}(:,l), end_ymarkers{ex}(:,l), '.', 'color',color{l})
+           if strcmp(endEvents{ex}{l},'robMovFin')
+               rn = 1:length(angulos_der);
+               ln  = rn(end)+1:length(sorted_trials);
+               plot(end_xmarkers{ex}(rn,l), end_ymarkers{ex}(rn,l), '.', 'color','r'); hold on
+               plot(end_xmarkers{ex}(ln,l), end_ymarkers{ex}(ln,l), '.', 'color','b')
+           else
+            plot(end_xmarkers{ex}(:,l), end_ymarkers{ex}(:,l), '.', 'color',color{l}); hold on
+           end
         end
     end
     

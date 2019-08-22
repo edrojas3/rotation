@@ -32,10 +32,10 @@ if ischar(e)
 end
 
 % Remove noisy trials
-if isfield(e,'slice')
+if isfield(e.slice,spk)
     slice = e.slice.(spk);
 else
-    slice = ones(length(trial),1);
+    slice = ones(length(e.trial),1);
 end
 e = eslice(e, slice);
 

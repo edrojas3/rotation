@@ -26,7 +26,7 @@ end
 
 % getArgumentValue('ARGUMENT',DEFAULTVALUE, VARARGIN);
 FilterType   = getArgumentValue('FilterType'   ,'exponential', varargin{:});
-TimeConstant = getArgumentValue('TimeConstant' ,0.05         , varargin{:}); % Time constant in seconds.
+TimeConstant = getArgumentValue('TimeConstant' ,0.5         , varargin{:}); % Time constant in seconds.
 attrit       = getArgumentValue('attrit',[TimeSamples(1) TimeSamples(end)], varargin{:},'warningoff'); % Attrition times. 
 normWidthCent= getArgumentValue('Normalize',[], varargin{:},'warningoff'); % Normalization with and center. 
 

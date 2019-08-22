@@ -6,9 +6,9 @@ bothways = getArgumentValue('bothways',1,varargin{:});
 hits = getArgumentValue('hits',1,varargin{:});
 samples = getArgumentValue('samples',-0.5:0.01:1,varargin{:});
 tau = getArgumentValue('tau',0.5,varargin{:});
-singleTrials = getArgumentValue('singleTrials',1,varargin{:});
+singleTrials = getArgumentValue('singleTrials',0,varargin{:});
 attrit = [samples(1),samples(end)];
-
+normindex = samples <= 0;
 % Remove noisy trials
 if isfield(e,'slice')
     slice = e.slice.(spk);
